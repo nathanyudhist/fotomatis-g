@@ -1,4 +1,3 @@
-// Tunggu sampai halaman siap sepenuhnya
 window.addEventListener('load', () => {
     
     const WIDTH = 600, HEIGHT = 1800;
@@ -10,7 +9,6 @@ window.addEventListener('load', () => {
     let photoStage = 0;
     let isBwMode = false; 
 
-    // Definisi elements di dalam sini agar aman
     const elements = {
         video: document.getElementById('liveVideo'),
         canvas: document.getElementById('finalCanvas'),
@@ -113,7 +111,7 @@ window.addEventListener('load', () => {
 
     const setupFilterKnob = () => {
         let isDragging = false;
-        let currentAngle = -90; // Default Kiri (Normal)
+        let currentAngle = -90; 
 
         const updateKnobUI = (angle) => {
             elements.knob.style.transform = `rotate(${angle}deg)`;
@@ -124,20 +122,30 @@ window.addEventListener('load', () => {
             elements.knob.style.transition = 'transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
             updateKnobUI(targetAngle);
             
-            // --- LOGIC FILTER ---
+            // --- BAGIAN INI SAYA UBAH TOTAL (DIRECT STYLE INJECTION) ---
             isBwMode = (targetAngle === 90);
+
+            // String filter kita simpan di variabel
+            const pinkFilter = 'sepia(0.5) hue-rotate(310deg) saturate(1.8) contrast(1.1) brightness(1.1)';
 
             if (isBwMode) {
                 elements.labelBW.classList.add('active');
                 elements.labelNormal.classList.remove('active');
-                // Tambah class ke video
-                elements.video.classList.add('filter-pink'); 
+                
+                // PAKSA FILTER LANGSUNG KE CSS (BYPASS CLASS)
+                elements.video.style.filter = pinkFilter;
+                elements.video.style.webkitFilter = pinkFilter; // Wajib buat Safari
+                
             } else {
                 elements.labelNormal.classList.add('active');
                 elements.labelBW.classList.remove('active');
-                // Hapus class dari video
-                elements.video.classList.remove('filter-pink');
+                
+                // HAPUS FILTER
+                elements.video.style.filter = 'none';
+                elements.video.style.webkitFilter = 'none';
             }
+            // -----------------------------------------------------------
+
             currentAngle = targetAngle;
         };
 
@@ -182,7 +190,6 @@ window.addEventListener('load', () => {
         window.addEventListener('touchmove', onDrag, { passive: false });
         window.addEventListener('touchend', endDrag);
 
-        // Init: Pastikan filter sesuai posisi awal
         snapToPosition(currentAngle);
     };
 
@@ -241,7 +248,7 @@ window.addEventListener('load', () => {
         }
         ctx.save();
         
-        // --- LOGIC HASIL FOTO ---
+        // --- LOGIC HASIL FOTO SAMA PERSIS DENGAN LIVE VIEW ---
         if (isBwMode) {
             ctx.filter = 'sepia(0.5) hue-rotate(310deg) saturate(1.8) contrast(1.1) brightness(1.1)'; 
         } else {
@@ -279,10 +286,9 @@ window.addEventListener('load', () => {
         setTimeout(() => window.location.href = 'final.html', 500);
     }
 
-    // Jalankan setup
     elements.shutterToggle.checked = false;
     setupFilterKnob();
     setupSwipeToggle();
     setupCamera();
 
-}); // End window load
+});
