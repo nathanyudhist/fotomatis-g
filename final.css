@@ -1,0 +1,172 @@
+/* --- PALET WARNA (STRICT) --- */
+:root {
+  --hex-cream: #f7f9dc;
+  --hex-pink: #f486c6;
+  --hex-magenta: #bf128c;
+  --hex-dark: #390a32;
+
+  --rgb-dark: 57, 10, 50;
+  --rgb-magenta: 191, 18, 140;
+}
+
+body {
+  margin: 0; padding: 0; width: 100vw; min-height: 100vh;
+  display: flex; justify-content: center; align-items: flex-start;
+  background-color: var(--hex-cream);
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  overflow-y: auto; overflow-x: hidden; touch-action: manipulation;
+}
+
+.main-wrapper {
+  position: relative; display: flex; flex-direction: column; align-items: center;
+  padding-top: 50px; padding-bottom: 80px;
+}
+
+/* --- MASKING LAYER --- */
+.print-mask {
+  position: absolute;
+  top: 50px; left: 50%; transform: translateX(-50%);
+  width: 318px; height: 198px;
+  background-color: var(--hex-cream);
+  z-index: 5; border-radius: 38px;
+}
+
+/* --- KEPALA DEVICE --- */
+.device-case-head {
+  width: 320px; height: 200px; background-color: var(--hex-pink);
+  border-radius: 40px 40px 20px 20px; 
+  padding: 20px 20px 15px 20px; 
+  box-sizing: border-box;
+  display: flex; flex-direction: column; position: relative;
+  z-index: 10; 
+  
+  border: 1px solid var(--hex-magenta);
+  box-shadow: inset 4px 4px 15px rgba(247, 249, 220, 0.6), inset -4px -4px 15px rgba(191, 18, 140, 0.5);
+}
+
+.screen-bezel {
+  flex: 1; background-color: var(--hex-dark); border-radius: 15px; position: relative;
+  /* BORDER DIHAPUS UNTUK MENGHILANGKAN CLIPPING */
+  border: none; 
+  box-shadow: inset 2px 2px 10px rgba(0,0,0,0.5);
+  overflow: hidden; display: flex; align-items: center; justify-content: center;
+}
+
+.screen-glass-reflection {
+  position: absolute; top: 0; right: 0; width: 100%; height: 100%;
+  background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 40%);
+  pointer-events: none;
+}
+
+.status-text {
+  color: var(--hex-cream);
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-weight: 400; font-size: 1.5rem; letter-spacing: 2px;
+  animation: blinkText 1s infinite;
+}
+
+@keyframes blinkText {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+.middle-deco {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-top: 15px; padding: 0 10px;
+}
+
+.brand-text {
+  font-size: 1.2rem; color: var(--hex-cream); font-weight: 500;
+  text-shadow: 0 1px 0 rgba(0,0,0,0.2);
+}
+
+.deco-line {
+  flex: 1; height: 2px; background: var(--hex-magenta);
+  margin-left: 15px; box-shadow: 0 1px 0 rgba(255,255,255,0.3);
+}
+
+.printer-slot {
+  position: absolute; bottom: -5px; left: 50%; transform: translateX(-50%);
+  width: 220px; height: 15px; background-color: var(--hex-dark);
+  border-radius: 0 0 5px 5px; border: 2px solid var(--hex-magenta); border-top: none;
+  z-index: 12; box-shadow: inset 0 5px 10px rgba(0,0,0,0.8);
+}
+
+/* --- WADAH PENAMPUNG (TRAY) EFEK PLASTIK/METALLIC --- */
+.photo-tray-wrapper {
+  position: relative;
+  width: 260px; height: 620px;
+  
+  background: linear-gradient(to bottom, #2a0524 0%, var(--hex-dark) 100%);
+  
+  border: 8px solid var(--hex-magenta);
+  border-top: none;
+  border-radius: 0 0 30px 30px;
+  
+  box-shadow: 
+    inset 0 15px 40px rgba(0,0,0,0.8),
+    inset 2px 0 2px rgba(255,255,255,0.3),
+    inset -2px 0 2px rgba(0,0,0,0.4),
+    0 1px 0 rgba(255,255,255,0.4),
+    0 20px 50px rgba(var(--rgb-dark), 0.4);
+    
+  margin-top: -10px; z-index: 5;
+  overflow: hidden;
+  display: flex; justify-content: center;
+}
+
+/* Refleksi Kilau Kaca pada Wadah */
+.photo-tray-wrapper::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: linear-gradient(
+    105deg,
+    rgba(255,255,255,0) 0%,
+    rgba(255,255,255,0.05) 40%,
+    rgba(255,255,255,0.1) 50%,
+    rgba(255,255,255,0) 60%
+  );
+  pointer-events: none;
+  z-index: 7; /* Di atas foto */
+}
+
+/* --- KERTAS FOTO --- */
+.printed-photo-container {
+  position: relative;
+  z-index: 6; 
+  padding-top: 20px;
+  
+  transform: translateY(-105%); 
+  animation: printSlideIntoTray 4s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+}
+
+@keyframes printSlideIntoTray {
+  0% { transform: translateY(-105%); }
+  100% { transform: translateY(0%); } 
+}
+
+img#finalResult {
+  width: 200px; height: auto; display: block;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.6);
+  border-bottom: 10px solid #fff;
+}
+
+/* --- TOMBOL AKSI --- */
+.action-buttons {
+  margin-top: 30px; display: flex; gap: 20px; opacity: 0;
+  animation: fadeIn 1s ease 3.5s forwards;
+  position: relative; z-index: 20; 
+}
+
+@keyframes fadeIn { to { opacity: 1; } }
+
+.btn {
+  background-color: var(--hex-magenta); color: var(--hex-cream);
+  border: 2px solid var(--hex-dark); padding: 12px 30px;
+  border-radius: 50px; font-weight: bold; cursor: pointer;
+  box-shadow: 4px 4px 0 rgba(57, 10, 50, 0.5); font-family: inherit; font-size: 1rem;
+  transition: transform 0.1s;
+}
+.btn:active { transform: translate(2px, 2px); box-shadow: 2px 2px 0 rgba(57, 10, 50, 0.5); }
+.btn-secondary { background-color: var(--hex-cream); color: var(--hex-dark); border-color: var(--hex-magenta); }

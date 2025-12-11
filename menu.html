@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fotomatis - Menu</title>
+
+  <link rel="icon" href="Assets/fish-photobooth/favicon.png" type="image/x-icon" />
+  <link rel="stylesheet" href="StyleSheets/camera.css" /> 
+
+  <style>
+    /* --- DEFINISI PALET (DIULANG UNTUK MEMASTIKAN KETERSEDIAAN) --- */
+    :root {
+      --hex-cream: #f7f9dc;
+      --hex-pink: #f486c6;
+      --hex-magenta: #bf128c;
+      --hex-dark: #390a32;
+      
+      --rgb-cream: 247, 249, 220;
+      --rgb-magenta: 191, 18, 140;
+      --rgb-dark: 57, 10, 50;
+    }
+
+    /* --- MENU PAGE LAYOUT --- */
+    body {
+      background-color: var(--hex-cream);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      color: var(--hex-dark);
+      text-align: center;
+      overflow-y: auto;
+      overflow-x: hidden;
+    }
+    
+    .container {
+      max-width: 450px;
+      width: 100%;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    
+    /* Menghilangkan header dan footer note */
+    header, .footer-note, .brand-title, .tagline {
+      display: none;
+    }
+
+    .content-area {
+      display: flex;
+      flex-direction: column; 
+      align-items: center;
+      width: 100%;
+    }
+
+    /* --- GAMBAR PHOTOBOOTH --- */
+    .image-wrapper {
+      width: 100%;
+      max-width: 350px;
+      border-radius: 0; 
+      overflow: hidden;
+      box-shadow: none; 
+      margin-bottom: 40px; 
+      line-height: 0;
+    }
+    
+    .photobooth-image {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+    
+    /* --- WADAH TOMBOL (KIRI-KANAN) --- */
+    .action-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 15px; /* Jarak antara dua tombol */
+      width: 100%;
+      max-width: 350px;
+    }
+
+    /* --- GAYA TOMBOL SKEUOMORPHIC --- */
+    .menu-button {
+      /* Fleksibilitas ukuran tombol */
+      flex-grow: 1; 
+      max-width: 170px;
+      
+      border: none;
+      padding: 15px 10px; /* Padding disesuaikan */
+      border-radius: 50px;
+      font-size: 0.95rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      user-select: none;
+    }
+
+    /* Tombol Primary: Take Photos */
+    #menu-camera-button {
+        background-color: var(--hex-magenta);
+        color: var(--hex-cream);
+        
+        box-shadow: 
+            inset 1px 1px 1px rgba(var(--rgb-cream), 0.5), 
+            inset -1px -1px 2px rgba(var(--rgb-magenta), 0.9), 
+            0 4px 6px -1px rgba(var(--rgb-dark), 0.4), 
+            0 1px 0 rgba(255,255,255,0.4); 
+    }
+
+    /* Tombol Secondary: Upload Photos */
+    #menu-upload-button {
+        background-color: var(--hex-cream);
+        color: var(--hex-dark);
+
+        box-shadow: 
+            inset 1px 1px 1px rgba(var(--rgb-cream), 0.9),
+            inset -1px -1px 2px rgba(var(--rgb-magenta), 0.5),
+            0 4px 6px -1px rgba(var(--rgb-dark), 0.4),
+            0 1px 0 rgba(255,255,255,0.4);
+    }
+
+    /* Efek Active (Ditekan) */
+    .menu-button:active { 
+        transform: translateY(2px);
+        box-shadow: 
+            inset 1px 1px 2px rgba(var(--rgb-dark), 0.4),
+            0 2px 4px rgba(var(--rgb-dark), 0.2); 
+    }
+  </style>
+</head>
+<body>
+  
+  <div class="container">
+    
+    <header></header>
+
+    <main class="content-area">
+      
+      <div class="image-wrapper">
+        <img src="Assets/photobooth-machine.png" alt="Photobooth Machine" class="photobooth-image">
+      </div>
+
+      <div class="action-buttons">
+        <button id="menu-camera-button" class="menu-button">TAKE PHOTOS</button>
+        <button id="menu-upload-button" class="menu-button">UPLOAD PHOTOS</button>
+      </div>
+
+    </main>
+    
+    <footer></footer>
+
+  </div>
+
+  <script>
+    document.getElementById('menu-camera-button').addEventListener('click', () => {
+        window.location.href = 'camera.html';
+    });
+    
+    document.getElementById('menu-upload-button').addEventListener('click', () => {
+        alert("Fitur Upload belum diimplementasikan.");
+    });
+  </script>
+</body>
+</html>
