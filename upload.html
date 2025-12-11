@@ -7,6 +7,7 @@
 
   <link rel="icon" href="Assets/fish-photobooth/favicon.png" type="image/x-icon" />
   <link rel="stylesheet" href="StyleSheets/camera.css" />
+  
   <style>
     /* --- DEFINISI PALET --- */
     :root {
@@ -20,17 +21,31 @@
       --rgb-dark: 57, 10, 50;
     }
 
-    /* --- UPLOAD PAGE LAYOUT --- */
+    /* --- GLOBAL & BODY SETUP --- */
+    html {
+        box-sizing: border-box;
+    }
+    *, *:before, *:after {
+        box-sizing: inherit;
+    }
+
     body {
       background-color: var(--hex-cream);
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      margin: 0;
+      
+      /* PENTING: Mengatur layout agar bisa discroll */
+      min-height: 100vh;
       display: flex;
       flex-direction: column;
-      justify-content: flex-start;
       align-items: center;
-      min-height: 100vh;
-      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-      padding-top: 50px;
-      padding-bottom: 50px;
+      
+      /* Memberikan jarak aman di atas dan bawah agar tidak mentok layar HP */
+      padding-top: 40px; 
+      padding-bottom: 100px; 
+      
+      /* Mencegah scroll ke samping (horizontal) */
+      overflow-x: hidden; 
       overflow-y: auto;
     }
 
@@ -39,41 +54,40 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      max-width: 400px;
       width: 100%;
+      max-width: 400px; /* Batas lebar agar rapi di desktop */
     }
 
     /* =========================== */
-    /*   DEVICE HEADER / TOP PART  */
+    /* DEVICE HEADER / TOP PART */
     /* =========================== */
     .device-case-head {
       width: 320px;
-      /* Tinggi Body Pink dikunci lebih tinggi untuk safety */
       height: 200px; 
       background-color: var(--hex-pink);
       border-radius: 40px 40px 20px 20px;
 
-      /* Padding diset ketat */
       padding: 20px 20px 0 20px; 
-      box-sizing: border-box;
-
+      
       display: flex;
       flex-direction: column;
       position: relative;
-      overflow: hidden; /* Masking */
+      overflow: hidden;
 
       border: 1px solid var(--hex-magenta);
       box-shadow: inset 4px 4px 15px rgba(var(--rgb-cream), 0.6),
                   inset -4px -4px 15px rgba(var(--rgb-magenta), 0.5);
+      
+      /* Supaya tetap di atas tray */
+      z-index: 10; 
     }
 
     .screen-bezel {
-      /* PENTING: Menggunakan position:relative dan top negatif */
       position: relative; 
-      top: -2px; /* Ditarik ke atas 2px untuk menutupi border bawah */
+      top: -2px; 
       
       margin-top: 15px; 
-      margin-bottom: 5px; /* Margin bawah dikurangi karena sudah ditarik ke atas */
+      margin-bottom: 5px; 
       
       height: 90px; 
       background-color: var(--hex-dark);
@@ -116,12 +130,9 @@
     /* Dekor tengah */
     .middle-deco {
       position: relative; 
-      
       display: flex;
       justify-content: space-between;
       align-items: center;
-      
-      /* Mengimbangi pergerakan bezel */
       margin-top: 5px; 
       padding: 0 10px; 
       margin-bottom: 0; 
@@ -147,10 +158,7 @@
 
     .printer-slot {
       position: relative; 
-      
-      /* Ditarik ke atas agar slot printer berada di batas bawah body pink */
       margin-top: 10px; 
-      
       left: 50%;
       transform: translateX(-50%);
       width: 220px;
@@ -164,7 +172,7 @@
     }
 
     /* =========================== */
-    /*       CANVAS TRAY AREA      */
+    /* CANVAS TRAY AREA     */
     /* =========================== */
     .photo-tray-wrapper {
       position: relative;
@@ -180,6 +188,9 @@
       overflow: hidden;
       display: flex;
       justify-content: center;
+      
+      /* Shadow luar agar terlihat mengambang */
+      box-shadow: 0 10px 20px rgba(0,0,0,0.2);
     }
 
     .photo-tray-wrapper::before {
@@ -224,22 +235,28 @@
     }
 
     /* =========================== */
-    /*          BUTTONS            */
+    /* BUTTONS           */
     /* =========================== */
     .controls {
       display: flex;
-      gap: 20px;
+      flex-direction: column; /* Ubah ke column agar rapi di HP */
+      gap: 15px;
       margin-top: 30px;
+      width: 100%;
+      max-width: 300px; /* Batas lebar tombol */
+      padding: 0 20px; /* Padding agar tidak mentok pinggir layar */
     }
 
     .btn {
+      width: 100%; /* Tombol memenuhi lebar container */
       border: none;
-      padding: 12px 20px;
+      padding: 15px 20px;
       border-radius: 50px;
-      font-weight: bold;
+      font-weight: 800;
       cursor: pointer;
       font-size: 1rem;
       transition: all 0.15s ease;
+      text-transform: uppercase;
 
       box-shadow:
         inset 1px 1px 1px rgba(var(--rgb-cream), 0.5),
@@ -256,6 +273,11 @@
     .btn-secondary {
       background-color: var(--hex-cream);
       color: var(--hex-dark);
+      border: 2px solid var(--hex-dark); /* Tambah border kontras */
+    }
+
+    .btn:active {
+        transform: translateY(2px);
     }
 
     #uploadPhotoInput {
