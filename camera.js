@@ -116,20 +116,25 @@ const setupFilterKnob = () => {
   };
 
   const snapToPosition = (angle) => {
+    // Memaksa sudut ke 90 atau -90
     const targetAngle = angle > 0 ? 90 : -90;
     elements.knob.style.transition = 'transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
     updateKnobUI(targetAngle);
     
-    // LOGIC FILTER
-    isBwMode = targetAngle === 90;
+    // --- DEBUGGING & LOGIC ---
+    isBwMode = (targetAngle === 90);
+    
+    //console.log("Posisi Knob:", targetAngle, "Mode Pink:", isBwMode); 
+
     if (isBwMode) {
       elements.labelBW.classList.add('active');
       elements.labelNormal.classList.remove('active');
-      // Pastikan nama class ini sama dengan di CSS (.filter-pink)
+      // Force Add Class
       elements.video.classList.add('filter-pink'); 
     } else {
       elements.labelNormal.classList.add('active');
       elements.labelBW.classList.remove('active');
+      // Force Remove Class
       elements.video.classList.remove('filter-pink');
     }
     currentAngle = targetAngle;
@@ -138,10 +143,6 @@ const setupFilterKnob = () => {
   elements.knob.style.transition = 'none';
   updateKnobUI(currentAngle);
   
-  // Baris ini dihapus karena dipindah ke logika snapToPosition di bawah
-  // elements.labelNormal.classList.add('active');
-  // elements.video.classList.remove('filter-pink');
-
   const startDrag = (e) => {
     if (elements.shutterToggle.checked) return;
     isDragging = true;
@@ -181,21 +182,39 @@ const setupFilterKnob = () => {
   window.addEventListener('touchend', endDrag);
 
   // --- INIT PENTING ---
-  // Panggil ini agar logika filter dijalankan sesuai posisi knob saat pertama buka
+  // Jalankan sekali saat start agar sinkron
   snapToPosition(currentAngle);
 };
 
 const setupCamera = () => {
   const constraints = {
     audio: false,
-    video: { facingMode: 'user', width: { ideal: 1280 }, height: { ideal: 720 } }
+    video: { 
+        facingMode: 'user', 
+        width: { ideal: 1280 }, 
+        height: { ideal: 720 } 
+    }
   };
+
+  // --- PATCH KHUSUS IPHONE (FORCE ATTRIBUTES) ---
+  // Ini menyuntikkan atribut HTML via JS supaya kamu gak perlu edit HTML manual
+  elements.video.setAttribute('autoplay', '');
+  elements.video.setAttribute('muted', '');
+  elements.video.setAttribute('playsinline', '');
+  elements.video.setAttribute('webkit-playsinline', '');
+  // ----------------------------------------------
+
   navigator.mediaDevices.getUserMedia(constraints)
     .then(stream => {
       elements.video.srcObject = stream;
-      elements.video.play();
+      // Promise play untuk handle browser policy
+      elements.video.play().catch(e => {
+         console.log("Autoplay dicegah browser, user harus tap layar dulu.", e);
+      });
     })
-    .catch(err => alert('Error Kamera (Pastikan HTTPS): ' + err.name));
+    .catch(err => {
+        alert('Gagal akses kamera: ' + err.message);
+    });
 };
 
 const startCountdown = callback => {
@@ -233,8 +252,9 @@ const capturePhoto = () => {
   }
   ctx.save();
   
+  // LOGIC HASIL FOTO (Canvas)
   if (isBwMode) {
-      // Filter untuk HASIL FOTO (Canvas)
+      // Filter Pink
       ctx.filter = 'sepia(0.5) hue-rotate(310deg) saturate(1.8) contrast(1.1) brightness(1.1)'; 
   } else {
       ctx.filter = 'none';
@@ -256,6 +276,7 @@ const capturePhoto = () => {
 const finalizePhotoStrip = () => {
   const { ctx, canvas } = elements;
   const frame = new Image();
+  // Pastikan file 'frame.png' ada di folder yang sama
   frame.src = 'frame.png'; 
   frame.onload = () => {
     ctx.globalCompositeOperation = 'source-over';
@@ -271,6 +292,7 @@ const saveAndRedirect = () => {
     setTimeout(() => window.location.href = 'final.html', 500);
 }
 
+// Init State
 elements.shutterToggle.checked = false;
 setupFilterKnob();
 setupSwipeToggle();
