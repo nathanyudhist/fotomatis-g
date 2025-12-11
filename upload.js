@@ -7,29 +7,31 @@ document.addEventListener('DOMContentLoaded', () => {
     const ctx = canvas.getContext('2d');
 
     const TOTAL_PHOTOS = 4;
-    // Nilai-nilai ini harus sesuai dengan Canvas (600x1800)
-    const PHOTO_W = 350; // Lebar slot foto
-    const PHOTO_H = 380; // Tinggi slot foto
-    const PHOTO_DEST_X = 125; // Posisi X awal slot (125 dari kiri)
-    const PHOTO_Y_POSITIONS = [120, 515, 910, 1305]; // Posisi Y awal 4 slot foto
+    // Ukuran Canvas 600x1800
+    const WIDTH = 600;
+    const HEIGHT = 1800;
+    
+    // Koordinat Slot Foto
+    const PHOTO_W = 350; 
+    const PHOTO_H = 380; 
+    const PHOTO_DEST_X = 125; 
+    const PHOTO_Y_POSITIONS = [120, 515, 910, 1305]; 
 
     let uploadedImages = [];
     let currentUploadStage = 0;
 
-    // --- SETUP APLIKASI ---
-
-    // Mengisi Canvas dengan background Cream saat awal
+    // 1. Inisialisasi Canvas (Warna Cream)
     ctx.fillStyle = "#f7f9dc";
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.fillRect(0, 0, WIDTH, HEIGHT);
 
+    // 2. Fungsi Tombol Upload
     uploadButton.addEventListener('click', () => {
         if (currentUploadStage < TOTAL_PHOTOS) {
             fileInput.click();
-        } else {
-            alert("Anda sudah mengupload 4 foto. Silakan klik READY.");
         }
     });
 
+    // 3. Saat File Dipilih
     fileInput.addEventListener('change', (event) => {
         const file = event.target.files[0];
         if (file) {
@@ -37,31 +39,32 @@ document.addEventListener('DOMContentLoaded', () => {
             reader.onload = (e) => {
                 const img = new Image();
                 img.onload = () => {
-                    // Simpan gambar ke array dan tampilkan di canvas
                     uploadedImages[currentUploadStage] = img;
                     drawPhotoOnCanvas(img, currentUploadStage);
 
                     currentUploadStage++;
-
-                    // Update UI
-                    if (currentUploadStage < TOTAL_PHOTOS) {
-                        uploadButton.textContent = `UPLOAD PHOTO ${currentUploadStage + 1} / 4`;
-                    } else {
-                        uploadButton.textContent = "UPLOADS COMPLETE";
-                        uploadButton.disabled = true;
-                        readyButton.style.display = 'block';
-                        readyButton.disabled = false;
-                    }
+                    updateUI();
                 };
                 img.src = e.target.result;
             };
             reader.readAsDataURL(file);
         }
+        // Reset input agar bisa upload file yang sama jika perlu
+        event.target.value = '';
     });
 
-    // ------------------------------------------------------------------
-    // FIXED: ASPECT RATIO CONTAIN LOGIC (Memastikan seluruh gambar terlihat)
-    // ------------------------------------------------------------------
+    // 4. Update Teks Tombol
+    const updateUI = () => {
+        if (currentUploadStage < TOTAL_PHOTOS) {
+            uploadButton.textContent = `ADD PHOTO ${currentUploadStage + 1} / 4`;
+        } else {
+            uploadButton.style.display = 'none'; // Sembunyikan tombol add
+            readyButton.style.display = 'block'; // Munculkan tombol print
+            readyButton.disabled = false;
+        }
+    };
+
+    // 5. Fungsi Menggambar Foto (CROP / COVER Logic)
     const drawPhotoOnCanvas = (img, stage) => {
         const slotW = PHOTO_W;
         const slotH = PHOTO_H;
@@ -73,41 +76,68 @@ document.addEventListener('DOMContentLoaded', () => {
 
         let drawW, drawH;
 
+        // Logika Cover (Isi Penuh)
         if (imgAspect > slotAspect) {
-            // Gambar lebih lebar (wide): Lebar gambar disamakan dengan lebar slot
-            drawW = slotW;
-            drawH = drawW / imgAspect;
-        } else {
-            // Gambar lebih tinggi (tall): Tinggi gambar disamakan dengan tinggi slot
             drawH = slotH;
             drawW = drawH * imgAspect;
+        } else {
+            drawW = slotW;
+            drawH = drawW / imgAspect;
         }
 
-        // --- Perhitungan Pemusatan (Centering) ---
-        // Bersihkan slot terlebih dahulu (jika ada sisa gambar sebelumnya)
-        ctx.fillStyle = "#f7f9dc";
-        ctx.fillRect(slotX, slotY, slotW, slotH);
-        
-        // CENTER secara horizontal dan vertikal di dalam slot
+        ctx.save();
+        ctx.beginPath();
+        ctx.rect(slotX, slotY, slotW, slotH);
+        ctx.clip(); // Potong gambar yang keluar dari kotak
+
+        // Center gambar
         const offsetX = slotX + (slotW - drawW) / 2;
         const offsetY = slotY + (slotH - drawH) / 2;
 
         ctx.drawImage(img, offsetX, offsetY, drawW, drawH);
+        ctx.restore();
     };
 
-    // --- FUNGSI READY ---
+    // 6. FUNGSI FINALISASI (INI YANG MEMPERBAIKI BUG FRAME)
     readyButton.addEventListener('click', () => {
         if (uploadedImages.length === TOTAL_PHOTOS) {
-            const photoStripDataURL = canvas.toDataURL('image/png');
-            localStorage.setItem('photoStrip', photoStripDataURL);
-            window.location.href = 'final.html';
+            
+            // Tampilkan status loading (opsional)
+            readyButton.textContent = "PROCESSING...";
+            readyButton.disabled = true;
+
+            // Load gambar frame.png agar tergabung
+            const frameImg = new Image();
+            frameImg.src = 'frame.png'; // Pastikan nama file frame benar
+            
+            frameImg.onload = () => {
+                // Gambar frame di atas semua foto
+                ctx.globalCompositeOperation = 'source-over';
+                ctx.drawImage(frameImg, 0, 0, WIDTH, HEIGHT);
+
+                // Simpan hasil gabungan
+                const photoStripDataURL = canvas.toDataURL('image/png');
+                localStorage.setItem('photoStrip', photoStripDataURL);
+
+                // Pindah halaman
+                setTimeout(() => {
+                    window.location.href = 'final.html';
+                }, 500);
+            };
+
+            frameImg.onerror = () => {
+                alert("Gagal memuat frame.png. Pastikan file ada di folder root.");
+                readyButton.disabled = false;
+                readyButton.textContent = "PRINT RESULT";
+            };
+
         } else {
             alert(`Harap upload ${TOTAL_PHOTOS} foto terlebih dahulu.`);
         }
     });
 
-    // --- FUNGSI KEMBALI ---
+    // 7. Tombol Kembali
     backButton.addEventListener('click', () => {
-        window.history.back();
+        window.location.href = 'menu.html';
     });
 });
