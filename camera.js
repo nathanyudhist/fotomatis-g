@@ -1,4 +1,3 @@
-// --- KONFIGURASI UKURAN ---
 const WIDTH = 600, HEIGHT = 1800;
 const TOTAL_PHOTOS = 4;
 const PHOTO_W = 350, PHOTO_H = 380;
@@ -25,33 +24,20 @@ const elements = {
   labelBW: document.getElementById('labelBW')
 };
 
-// --- LOGIKA SWIPE TOGGLE (MAGENTA ke PINK) ---
 const setupSwipeToggle = () => {
   let isDragging = false;
   let startX = 0;
   let currentX = 0;
   const MAX_SLIDE = 44; 
-
-  // WARNA GRADASI REALISTIS
-  // Start (OFF): MAGENTA (#bf128c)
   const startColor = { r: 191, g: 18, b: 140 }; 
-  // End (ON): PINK (#f486c6)
   const endColor = { r: 244, g: 134, b: 198 }; 
-  
   const lerp = (start, end, t) => start * (1 - t) + end * t;
 
   const updateToggleVisual = (xPos) => {
-    // 1. Geser Thumb
     elements.sliderThumb.style.transform = `translateX(${xPos}px)`;
-    
-    // 2. Hitung Persen
     const percent = xPos / MAX_SLIDE;
-    
-    // 3. Fade Text
     elements.textOff.style.opacity = (1 - percent).toFixed(2);
     elements.textOn.style.opacity = percent.toFixed(2);
-
-    // 4. Ubah Warna Background Track (Gradasi)
     const currentR = Math.round(lerp(startColor.r, endColor.r, percent));
     const currentG = Math.round(lerp(startColor.g, endColor.g, percent));
     const currentB = Math.round(lerp(startColor.b, endColor.b, percent));
@@ -59,21 +45,20 @@ const setupSwipeToggle = () => {
   };
 
   const snapToState = (isOn) => {
-    // Aktifkan transisi untuk snap
     elements.sliderThumb.style.transition = 'transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
     elements.textOff.style.transition = 'opacity 0.2s linear';
     elements.textOn.style.transition = 'opacity 0.2s linear';
     elements.sliderTrack.style.transition = 'background-color 0.2s linear';
 
     if (isOn) {
-      updateToggleVisual(MAX_SLIDE); // ON -> Warna Pink
+      updateToggleVisual(MAX_SLIDE); 
       if (!elements.shutterToggle.checked) {
         elements.shutterToggle.checked = true;
         disableControls();
         startCountdown(capturePhoto);
       }
     } else {
-      updateToggleVisual(0); // OFF -> Warna Magenta
+      updateToggleVisual(0); 
       elements.shutterToggle.checked = false;
     }
   };
@@ -87,7 +72,6 @@ const setupSwipeToggle = () => {
     if (elements.shutterToggle.checked) return;
     isDragging = true;
     startX = e.touches ? e.touches[0].clientX : e.clientX;
-    // Matikan transisi saat drag manual
     elements.sliderThumb.style.transition = 'none';
     elements.textOff.style.transition = 'none';
     elements.textOn.style.transition = 'none';
@@ -99,18 +83,14 @@ const setupSwipeToggle = () => {
     if(e.type === 'touchmove') e.preventDefault();
     const clientX = e.touches ? e.touches[0].clientX : e.clientX;
     const deltaX = clientX - startX;
-    
-    // Klik biasa vs Drag
     let newPos = Math.max(0, Math.min(deltaX, MAX_SLIDE));
     currentX = newPos;
-    
     updateToggleVisual(newPos);
   };
 
   const endDrag = () => {
     if (!isDragging) return;
     isDragging = false;
-    // Jika digeser > 50%, snap ON. Jika tidak, balik OFF.
     if (currentX > (MAX_SLIDE / 2)) {
       snapToState(true);
     } else {
@@ -118,19 +98,15 @@ const setupSwipeToggle = () => {
     }
   };
 
-  // Tambahkan listener
   elements.switchContainer.addEventListener('mousedown', startDrag);
   elements.switchContainer.addEventListener('touchstart', startDrag, { passive: false });
   window.addEventListener('mousemove', onDrag);
   window.addEventListener('mouseup', endDrag);
   window.addEventListener('touchmove', onDrag, { passive: false });
   window.addEventListener('touchend', endDrag);
-  
-  // Init Warna Awal (OFF = Magenta)
   updateToggleVisual(0);
 };
 
-// --- LOGIKA KNOB ---
 const setupFilterKnob = () => {
   let isDragging = false;
   let currentAngle = -90;
@@ -210,7 +186,7 @@ const setupCamera = () => {
       elements.video.srcObject = stream;
       elements.video.play();
     })
-    .catch(err => alert('Error Kamera: ' + err.name));
+    .catch(err => alert('Error Kamera (Pastikan HTTPS): ' + err.name));
 };
 
 const startCountdown = callback => {
@@ -265,7 +241,8 @@ const capturePhoto = () => {
 const finalizePhotoStrip = () => {
   const { ctx, canvas } = elements;
   const frame = new Image();
-  frame.src = 'Assets/fish-photobooth/camerapage/frame.png'; 
+  // PATH DIPERBAIKI: Langsung nama file
+  frame.src = 'frame.png'; 
   frame.onload = () => {
     ctx.globalCompositeOperation = 'source-over';
     ctx.drawImage(frame, 0, 0, WIDTH, HEIGHT);
@@ -280,7 +257,6 @@ const saveAndRedirect = () => {
     setTimeout(() => window.location.href = 'final.html', 500);
 }
 
-// Init
 elements.shutterToggle.checked = false;
 setupFilterKnob();
 setupSwipeToggle();
