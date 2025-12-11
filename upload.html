@@ -7,40 +7,49 @@
   <link rel="icon" href="favicon.png" type="image/x-icon" />
 
   <style>
-    /* --- RESET TOTAL --- */
+    /* --- RESET & UNLOCK SCROLL (WAJIB) --- */
     * {
-      box-sizing: border-box; 
-      -webkit-tap-highlight-color: transparent;
+      box-sizing: border-box;
     }
 
     html {
-      height: 100%;
+      /* Pastikan HTML tidak membatasi tinggi */
+      height: auto !important;
+      min-height: 100% !important;
     }
 
     body {
+      /* PENYEBAB UTAMA FIX: Mengaktifkan kembali sentuhan jari */
+      touch-action: auto !important; 
+      
+      /* Paksa Scroll Bar Muncul */
+      overflow-y: auto !important; 
+      -webkit-overflow-scrolling: touch !important; /* Smooth scroll iPhone */
+      
+      /* Reset tinggi agar bisa memanjang */
+      height: auto !important;
+      min-height: 100vh !important;
+      position: static !important;
+      
+      background-color: #f7f9dc;
       margin: 0;
       padding: 0;
-      background-color: #f7f9dc; /* Cream */
       font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
       
-      /* INI KUNCINYA: Biarkan tinggi otomatis, JANGAN 100vh */
-      min-height: 100%;
-      height: auto;
-      
-      /* Tata Letak */
+      /* Layout Flex ke bawah */
       display: flex;
       flex-direction: column;
       align-items: center;
       
-      /* Padding Atas & BAWAH (Penting biar bisa scroll sampai mentok bawah) */
+      /* Padding agar konten tidak mentok */
       padding-top: 20px;
-      padding-bottom: 100px; 
+      padding-bottom: 120px; 
     }
 
     /* --- CONTAINER UTAMA --- */
     .main-wrapper {
       width: 100%;
-      max-width: 400px; /* Batasi lebar di Laptop biar gak raksasa */
+      max-width: 400px;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -49,90 +58,61 @@
 
     /* --- 1. KEPALA MESIN (PINK) --- */
     .device-case-head {
-      /* Ukuran responsive, max 320px */
-      width: 90%; 
-      max-width: 320px; 
-      
-      /* Tinggi dikurangi biar gak makan tempat (Scale Down) */
+      width: 90%;
+      max-width: 320px;
       height: 140px; 
-      
-      background-color: #f486c6; /* Pink */
+      background-color: #f486c6; 
       border-radius: 30px 30px 15px 15px;
       padding: 15px;
-      
-      display: flex; 
-      flex-direction: column; 
-      position: relative;
-      
-      border: 1px solid #bf128c; /* Magenta */
+      display: flex; flex-direction: column; position: relative;
+      border: 1px solid #bf128c;
       box-shadow: inset 4px 4px 15px rgba(247, 249, 220, 0.6), inset -4px -4px 15px rgba(191, 18, 140, 0.5);
       z-index: 10;
     }
 
-    /* Layar Hitam di Kepala */
     .screen-bezel {
-      background-color: #390a32; /* Dark */
+      background-color: #390a32;
       border-radius: 10px;
-      height: 60px; /* Lebih kecil */
-      display: flex; 
-      align-items: center; 
-      justify-content: center;
+      height: 60px;
+      display: flex; align-items: center; justify-content: center;
       border: 2px solid #bf128c;
     }
 
     .status-text {
       color: #f7f9dc;
-      font-size: 1.2rem; /* Font diperkecil sedikit */
+      font-size: 1.2rem;
       letter-spacing: 2px;
       font-weight: bold;
     }
 
-    /* Slot Printer Hitam Kecil */
     .printer-slot {
-      position: absolute; 
-      bottom: -8px; 
-      left: 50%; 
-      transform: translateX(-50%);
-      width: 60%; 
-      height: 12px; 
-      background-color: #390a32;
-      border-radius: 0 0 5px 5px; 
-      border: 2px solid #bf128c; 
-      border-top: none; 
-      z-index: 12;
+      position: absolute; bottom: -8px; left: 50%; transform: translateX(-50%);
+      width: 60%; height: 12px; background-color: #390a32;
+      border-radius: 0 0 5px 5px; border: 2px solid #bf128c; border-top: none; z-index: 12;
     }
 
-    /* --- 2. WADAH FOTO (TRAY GELAP) --- */
+    /* --- 2. WADAH FOTO (TRAY) --- */
     .photo-tray-wrapper {
       position: relative;
-      /* Lebar sedikit lebih kecil dari kepala */
-      width: 85%; 
+      width: 85%;
       max-width: 280px;
-      
-      /* Tinggi otomatis mengikuti isi canvas */
       height: auto; 
-      
       background: linear-gradient(to bottom, #2a0524 0%, #390a32 100%);
       border: 6px solid #bf128c;
       border-top: none;
       border-radius: 0 0 25px 25px;
-      
-      /* Geser ke atas dikit biar nyambung sama kepala */
       margin-top: -8px; 
       z-index: 5;
-      
-      display: flex; 
-      justify-content: center;
+      display: flex; justify-content: center;
       padding-bottom: 25px;
     }
 
     .photobooth-container {
       position: relative;
-      width: 90%; /* Isi tray 90% lebar tray */
+      width: 90%;
       margin-top: 20px;
     }
 
-    /* Canvas Hasil Foto */
     #finalCanvas {
       width: 100%;
       height: auto;
@@ -140,24 +120,18 @@
       background-color: #f7f9dc;
     }
 
-    /* Frame Overlay (Gambar Bingkai) */
     .frame-overlay {
       width: 100%;
-      position: absolute; 
-      top: 0; 
-      left: 0;
+      position: absolute; top: 0; left: 0;
       pointer-events: none;
     }
 
-    /* --- 3. TOMBOL NAVIGASI --- */
+    /* --- 3. TOMBOL --- */
     .controls {
       display: flex;
       flex-direction: column;
       gap: 12px;
-      
-      /* Jarak dari tray */
-      margin-top: 30px; 
-      
+      margin-top: 30px;
       width: 85%;
       max-width: 300px;
       z-index: 20;
@@ -174,23 +148,10 @@
       box-shadow: 0 4px 6px rgba(0,0,0,0.2);
       font-family: inherit;
       text-transform: uppercase;
-      transition: transform 0.1s;
     }
 
-    .btn:active {
-      transform: scale(0.98);
-    }
-
-    .btn-primary { 
-      background-color: #bf128c; 
-      color: #f7f9dc; 
-    }
-    
-    .btn-secondary { 
-      background-color: #f7f9dc; 
-      color: #390a32; 
-      border: 2px solid #390a32; 
-    }
+    .btn-primary { background-color: #bf128c; color: #f7f9dc; }
+    .btn-secondary { background-color: #f7f9dc; color: #390a32; border: 2px solid #390a32; }
     
     #uploadPhotoInput { display: none; }
   </style>
