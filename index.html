@@ -4,12 +4,12 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>Fotomatis</title>
-  <link rel="icon" href="Assets/fish-photobooth/favicon.png" type="image/x-icon" />
   
+  <link rel="icon" href="Assets/fish-photobooth/favicon.png" type="image/x-icon" />
   <link rel="stylesheet" href="StyleSheets/camera.css" /> 
   
   <style>
-    /* --- DEFINISI PALET (DIULANG UNTUK MEMASTIKAN KETERSEDIAAN) --- */
+    /* --- DEFINISI PALET --- */
     :root {
       --hex-cream: #f7f9dc;
       --hex-pink: #f486c6;
@@ -21,6 +21,12 @@
       --rgb-dark: 57, 10, 50;
     }
 
+    /* [PENTING 1] Reset Box Model */
+    /* Ini kunci agar tampilan tidak geser ke kanan */
+    * {
+        box-sizing: border-box;
+    }
+
     /* --- HOME PAGE LAYOUT --- */
     body {
       background-color: var(--hex-cream);
@@ -29,6 +35,10 @@
       justify-content: center;
       align-items: center;
       min-height: 100vh;
+      
+      /* Reset margin bawaan browser */
+      margin: 0; 
+      
       padding: 20px;
       overflow-y: auto;
       overflow-x: hidden;
@@ -44,7 +54,6 @@
       align-items: center;
     }
     
-    /* Menghilangkan elemen yang tidak perlu */
     header, .footer-note {
       display: none;
     }
@@ -56,35 +65,41 @@
       width: 100%;
     }
 
-    /* --- GAMBAR PHOTOBOOTH (Full-bleed, Tanpa Border) --- */
+    /* --- GAMBAR PHOTOBOOTH --- */
     .image-wrapper {
       width: 100%;
-      max-width: 350px; /* Ukuran maksimal gambar */
+      max-width: 350px; 
       border-radius: 0; 
       overflow: hidden;
       box-shadow: none; 
       margin-bottom: 40px; 
       line-height: 0;
+      
+      /* [PENTING 2] Pastikan wrapper di tengah */
+      margin-left: auto;
+      margin-right: auto;
     }
     
     .photobooth-image {
       width: 100%;
       height: auto;
       display: block;
+      /* Pastikan gambar di dalam wrapper juga di tengah */
+      margin: 0 auto; 
     }
     
-    /* --- TOMBOL ENTER (Skeuomorphic, Menyesuaikan Ukuran Teks) --- */
+    /* --- TOMBOL ENTER --- */
     .cta-button {
       background-color: var(--hex-magenta);
       color: var(--hex-cream);
       
-      display: inline-block; /* Agar menyusut seukuran konten */
+      display: inline-block; 
       
       text-decoration: none;
       font-size: 1.2rem;
-      font-weight: bold;
+      font-weight: 800; /* Lebih tebal agar jelas */
       text-align: center;
-      padding: 15px 30px;
+      padding: 15px 40px; /* Padding kanan kiri diperlebar sedikit */
       border-radius: 50px;
       
       /* Skeuomorphic shadows */
@@ -96,6 +111,9 @@
       
       transition: all 0.15s ease;
       user-select: none;
+      
+      /* [PENTING 3] Pastikan tombol tidak geser */
+      margin: 0 auto; 
     }
     
     .cta-button:hover {
@@ -114,8 +132,7 @@
 
   <div class="container">
     
-    <header>
-      </header>
+    <header></header>
 
     <main class="content-area">
       
@@ -127,8 +144,8 @@
         ENTER
       </a>
 
-      <p class="footer-note">
-        </p>
+      <p class="footer-note"></p>
+
     </main>
     
   </div>
