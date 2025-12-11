@@ -5,7 +5,7 @@ const PHOTO_DEST_X = 125;
 const PHOTO_Y_POSITIONS = [120, 515, 910, 1305];
 
 let photoStage = 0;
-let isBwMode = false;
+let isBwMode = false; // "isBwMode" sekarang berarti "isPinkMode"
 
 const elements = {
   video: document.getElementById('liveVideo'),
@@ -119,15 +119,17 @@ const setupFilterKnob = () => {
     const targetAngle = angle > 0 ? 90 : -90;
     elements.knob.style.transition = 'transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
     updateKnobUI(targetAngle);
+    
+    // PERBAIKAN LOGIC FILTER
     isBwMode = targetAngle === 90;
     if (isBwMode) {
       elements.labelBW.classList.add('active');
       elements.labelNormal.classList.remove('active');
-      elements.video.classList.add('grayscale');
+      elements.video.classList.add('filter-pink'); // Pakai class Pink
     } else {
       elements.labelNormal.classList.add('active');
       elements.labelBW.classList.remove('active');
-      elements.video.classList.remove('grayscale');
+      elements.video.classList.remove('filter-pink');
     }
     currentAngle = targetAngle;
   };
@@ -135,7 +137,7 @@ const setupFilterKnob = () => {
   elements.knob.style.transition = 'none';
   updateKnobUI(currentAngle);
   elements.labelNormal.classList.add('active');
-  elements.video.classList.remove('grayscale');
+  elements.video.classList.remove('filter-pink');
 
   const startDrag = (e) => {
     if (elements.shutterToggle.checked) return;
@@ -223,8 +225,15 @@ const capturePhoto = () => {
       ctx.fillRect(0,0,WIDTH,HEIGHT);
   }
   ctx.save();
-  if (isBwMode) ctx.filter = 'url(#retroGradient)'; 
-  else ctx.filter = 'none';
+  
+  // PERBAIKAN LOGIC CANVAS
+  if (isBwMode) {
+      // String CSS Filter yang sama persis dengan CSS agar hasil foto Pink
+      ctx.filter = 'sepia(0.5) hue-rotate(310deg) saturate(1.8) contrast(1.1) brightness(1.1)'; 
+  } else {
+      ctx.filter = 'none';
+  }
+
   ctx.translate(WIDTH, 0);
   ctx.scale(-1, 1);
   ctx.drawImage(video, sX, sY, sW, sH, WIDTH - PHOTO_DEST_X - destW, PHOTO_Y_POSITIONS[photoStage], destW, destH);
@@ -241,7 +250,6 @@ const capturePhoto = () => {
 const finalizePhotoStrip = () => {
   const { ctx, canvas } = elements;
   const frame = new Image();
-  // PATH DIPERBAIKI: Langsung nama file
   frame.src = 'frame.png'; 
   frame.onload = () => {
     ctx.globalCompositeOperation = 'source-over';
