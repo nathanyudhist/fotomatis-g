@@ -54,33 +54,34 @@ body {
   background: linear-gradient(135deg, rgba(var(--rgb-cream), 0.15) 0%, rgba(var(--rgb-cream), 0) 40%);
   pointer-events: none; z-index: 10;
 }
-.screen-display { width: 100%; height: 100%; position: relative; }
+.screen-display { width: 100%; height: 100%; position: relative; background: #000; }
 
-/* SETUP VIDEO MENTAH (TANPA FILTER) */
+/* SETUP VIDEO DEFAULT */
 #liveVideo { 
   width: 100%; height: 100%; object-fit: cover; 
   transform: scaleX(-1); display: block; 
-  /* Pastikan video punya base filter none */
-  filter: none;
+  filter: none; 
   -webkit-filter: none;
+  /* Optimization */
+  will-change: transform, filter;
 }
 
-/* --- PATCH: FILTER IPHONE (NUCLEAR FIX) --- */
-.filter-pink { 
-  /* 1. Syntax Standar */
+/* --- PATCH FINAL FIX (SELECTOR SPECIFICITY) --- */
+/* Menggunakan ID + CLASS (#liveVideo.filter-pink) agar menang melawan styling default */
+
+#liveVideo.filter-pink { 
+  /* Visual Debug: Kalau border merah muncul tapi filter tidak, berarti masalah render engine HP */
+  /* border: 2px solid red; */ 
+
+  /* Filter Pink */
   filter: sepia(0.5) hue-rotate(310deg) saturate(1.8) contrast(1.1) brightness(1.1) !important; 
-  
-  /* 2. Syntax Webkit (Wajib iPhone) */
   -webkit-filter: sepia(0.5) hue-rotate(310deg) saturate(1.8) contrast(1.1) brightness(1.1) !important; 
   
-  /* 3. Paksa GPU Acceleration (Agar tidak dianggap berat oleh iOS) */
-  transform: translate3d(0,0,0) scaleX(-1) !important;
-  
-  /* 4. Pastikan opacity penuh */
-  opacity: 1 !important;
+  /* Memastikan transform tetap ada */
+  transform: scaleX(-1) !important;
 }
 
-/* UPDATE FONT TIMER: SANS SERIF REGULAR */
+/* UPDATE FONT TIMER */
 .countdown-timer {
   position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
   z-index: 100; font-size: 8rem; color: var(--hex-cream);
