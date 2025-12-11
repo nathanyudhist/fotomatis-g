@@ -120,12 +120,13 @@ const setupFilterKnob = () => {
     elements.knob.style.transition = 'transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
     updateKnobUI(targetAngle);
     
-    // PERBAIKAN LOGIC FILTER
+    // LOGIC FILTER
     isBwMode = targetAngle === 90;
     if (isBwMode) {
       elements.labelBW.classList.add('active');
       elements.labelNormal.classList.remove('active');
-      elements.video.classList.add('filter-pink'); // Pakai class Pink
+      // Pastikan nama class ini sama dengan di CSS (.filter-pink)
+      elements.video.classList.add('filter-pink'); 
     } else {
       elements.labelNormal.classList.add('active');
       elements.labelBW.classList.remove('active');
@@ -136,8 +137,10 @@ const setupFilterKnob = () => {
 
   elements.knob.style.transition = 'none';
   updateKnobUI(currentAngle);
-  elements.labelNormal.classList.add('active');
-  elements.video.classList.remove('filter-pink');
+  
+  // Baris ini dihapus karena dipindah ke logika snapToPosition di bawah
+  // elements.labelNormal.classList.add('active');
+  // elements.video.classList.remove('filter-pink');
 
   const startDrag = (e) => {
     if (elements.shutterToggle.checked) return;
@@ -176,6 +179,10 @@ const setupFilterKnob = () => {
   window.addEventListener('mouseup', endDrag);
   window.addEventListener('touchmove', onDrag, { passive: false });
   window.addEventListener('touchend', endDrag);
+
+  // --- INIT PENTING ---
+  // Panggil ini agar logika filter dijalankan sesuai posisi knob saat pertama buka
+  snapToPosition(currentAngle);
 };
 
 const setupCamera = () => {
@@ -226,9 +233,8 @@ const capturePhoto = () => {
   }
   ctx.save();
   
-  // PERBAIKAN LOGIC CANVAS
   if (isBwMode) {
-      // String CSS Filter yang sama persis dengan CSS agar hasil foto Pink
+      // Filter untuk HASIL FOTO (Canvas)
       ctx.filter = 'sepia(0.5) hue-rotate(310deg) saturate(1.8) contrast(1.1) brightness(1.1)'; 
   } else {
       ctx.filter = 'none';
