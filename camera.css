@@ -57,9 +57,13 @@ body {
 .screen-display { width: 100%; height: 100%; position: relative; }
 #liveVideo { width: 100%; height: 100%; object-fit: cover; transform: scaleX(-1); display: block; }
 
-/* PERBAIKAN: Ganti .grayscale jadi .filter-pink dengan nilai CSS murni */
+/* --- PERBAIKAN FILTER (BUG FIX UTAMA) --- */
 .filter-pink { 
+  /* Standar Web Modern */
   filter: sepia(0.5) hue-rotate(310deg) saturate(1.8) contrast(1.1) brightness(1.1); 
+  
+  /* WAJIB untuk Safari / iPhone agar filter muncul */
+  -webkit-filter: sepia(0.5) hue-rotate(310deg) saturate(1.8) contrast(1.1) brightness(1.1); 
 }
 
 /* UPDATE FONT TIMER: SANS SERIF REGULAR */
