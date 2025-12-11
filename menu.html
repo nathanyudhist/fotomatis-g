@@ -6,11 +6,10 @@
   <title>Fotomatis - Menu</title>
 
   <link rel="icon" href="favicon.png" type="image/x-icon" />
-  
   <link rel="stylesheet" href="camera.css" /> 
 
   <style>
-    /* CSS LANGSUNG DITULIS DISINI BIAR AMAN */
+    /* --- DEFINISI PALET --- */
     :root {
       --hex-cream: #f7f9dc;
       --hex-pink: #f486c6;
@@ -21,6 +20,11 @@
       --rgb-dark: 57, 10, 50;
     }
 
+    /* [PENTING 1] Reset Global agar ukuran elemen akurat */
+    * {
+        box-sizing: border-box;
+    }
+
     body {
       background-color: var(--hex-cream);
       display: flex;
@@ -28,12 +32,15 @@
       justify-content: center;
       align-items: center;
       min-height: 100vh;
-      padding: 20px;
+      
+      /* Padding aman agar konten tidak menempel ke pinggir layar HP */
+      padding: 20px; 
+      
       font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
       color: var(--hex-dark);
       text-align: center;
       overflow-y: auto;
-      overflow-x: hidden;
+      overflow-x: hidden; /* Mencegah geser kanan kiri */
       margin: 0;
     }
     
@@ -63,12 +70,18 @@
       box-shadow: none; 
       margin-bottom: 40px; 
       line-height: 0;
+      
+      /* [PENTING 2] Pastikan wrapper di tengah secara eksplisit */
+      margin-left: auto;
+      margin-right: auto;
     }
     
     .photobooth-image {
       width: 100%;
       height: auto;
       display: block;
+      /* Pastikan gambar juga rata tengah di dalam wrappernya */
+      margin: 0 auto; 
     }
     
     .action-buttons {
@@ -77,10 +90,14 @@
       gap: 15px;
       width: 100%;
       max-width: 350px;
+      
+      /* [PENTING 3] Pastikan tombol wrapper di tengah */
+      margin-left: auto;
+      margin-right: auto;
     }
 
     .menu-button {
-      flex-grow: 1; 
+      flex: 1; /* Menggunakan flex:1 agar lebar kedua tombol selalu sama */
       max-width: 170px;
       border: none;
       padding: 15px 10px;
@@ -126,7 +143,7 @@
     <main class="content-area">
       
       <div class="image-wrapper">
-        <img src="photobooth-machine.png" alt="Photobooth Machine" class="photobooth-image">
+        <img src="Assets/photobooth-machine.png" alt="Photobooth Machine" class="photobooth-image">
       </div>
 
       <div class="action-buttons">
