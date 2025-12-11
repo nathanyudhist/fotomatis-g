@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Fotomatis Camera</title>
+  <link rel="icon" href="Assets/fish-photobooth/favicon.png" type="image/x-icon" />
+  <link rel="stylesheet" href="StyleSheets/camera.css" />
+</head>
+<body>
+
+  <div class="device-case">
+    
+    <div class="indicator-light"></div>
+
+    <div class="screen-bezel">
+      <div class="screen-glass-reflection"></div> 
+      <div class="screen-display">
+        <div class="countdown-timer" style="display:none;">3</div>
+        <video id="liveVideo" autoplay playsinline muted></video>
+        <canvas id="finalCanvas" width="600" height="1800" style="display: none;"></canvas>
+      </div>
+    </div>
+
+    <div class="middle-control-bar">
+      <div class="brand-text">Fotomatis</div>
+      <div class="shutter-wrapper">
+        <div class="switch-container" id="switchContainer">
+          <input type="checkbox" id="shutterToggle">
+          <div class="slider-track" id="sliderTrack">
+            <span class="text-off" id="textOff">OFF</span>
+            <span class="text-on" id="textOn" style="opacity: 0;">ON</span>
+            <div class="slider-thumb" id="sliderThumb"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="separator-line"></div>
+
+    <div class="bottom-controls">
+      <div class="knob-ui">
+        <span id="labelNormal" class="knob-text active">C</span>
+        <div id="filterKnob" class="knob-body">
+          <div class="knob-top">
+            <div class="knob-notch"></div>
+          </div>
+        </div>
+        <span id="labelBW" class="knob-text">G</span>
+      </div>
+    </div>
+
+  </div>
+
+  <svg style="width:0; height:0; position: absolute;">
+    <defs>
+      <filter id="retroGradient">
+        <feColorMatrix type="matrix" values="0.33 0.33 0.33 0 0
+                                             0.33 0.33 0.33 0 0
+                                             0.33 0.33 0.33 0 0
+                                             0 0 0 1 0"/>
+        <feComponentTransfer color-interpolation-filters="sRGB">
+          <feFuncR type="table" tableValues="0.22 0.75 0.95 0.97"/>
+          <feFuncG type="table" tableValues="0.04 0.07 0.52 0.97"/>
+          <feFuncB type="table" tableValues="0.20 0.55 0.77 0.86"/>
+        </feComponentTransfer>
+      </filter>
+    </defs>
+  </svg>
+
+  <script src="Javascripts/camera.js"></script>
+</body>
+</html>

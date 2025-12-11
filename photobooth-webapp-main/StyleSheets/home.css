@@ -1,0 +1,75 @@
+:root {
+  --cream: #f7f9dc;
+  --pink: #f486c6;
+  --magenta: #bf128c;
+  --dark: #390a32;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--cream);
+  color: var(--dark);
+  font-family: 'Courier New', Courier, monospace; /* Font kesan vintage */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  overflow: hidden;
+}
+
+.logo {
+  margin-bottom: 2rem;
+  z-index: 10;
+}
+
+/* Hiasan Preview Frame di Halaman Depan */
+.photobooth-preview {
+  width: 200px;
+  height: 355px; /* Rasio 9:16 */
+  background: var(--dark);
+  border: 4px solid var(--dark);
+  border-radius: 10px;
+  box-shadow: 10px 10px 0px var(--pink);
+  margin-bottom: 2rem;
+  position: relative;
+}
+
+.preview-box {
+  width: 100%;
+  height: 100%;
+  background-color: #fff;
+  opacity: 0.1;
+}
+
+/* Tombol Retro */
+button {
+  background-color: var(--magenta);
+  color: var(--cream);
+  border: 3px solid var(--dark);
+  padding: 15px 40px;
+  font-size: 1.5rem;
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 50px;
+  box-shadow: 5px 5px 0px var(--dark);
+  transition: all 0.2s ease;
+  font-family: inherit;
+  text-transform: uppercase;
+}
+
+button:hover {
+  transform: translate(2px, 2px);
+  box-shadow: 3px 3px 0px var(--dark);
+  background-color: var(--pink);
+}
+
+button:active {
+  transform: translate(5px, 5px);
+  box-shadow: none;
+}
