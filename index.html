@@ -4,133 +4,24 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>Fotomatis</title>
-  <link rel="icon" href="Assets/fish-photobooth/favicon.png" type="image/x-icon" />
-  
-  <link rel="stylesheet" href="StyleSheets/camera.css" /> 
-  
-  <style>
-    /* --- DEFINISI PALET (DIULANG UNTUK MEMASTIKAN KETERSEDIAAN) --- */
-    :root {
-      --hex-cream: #f7f9dc;
-      --hex-pink: #f486c6;
-      --hex-magenta: #bf128c;
-      --hex-dark: #390a32;
-      
-      --rgb-cream: 247, 249, 220;
-      --rgb-magenta: 191, 18, 140;
-      --rgb-dark: 57, 10, 50;
-    }
-
-    /* --- HOME PAGE LAYOUT --- */
-    body {
-      background-color: var(--hex-cream);
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-      padding: 20px;
-      overflow-y: auto;
-      overflow-x: hidden;
-      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-    }
-    
-    .container {
-      max-width: 450px;
-      width: 100%;
-      padding: 0; 
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-    
-    /* Menghilangkan elemen yang tidak perlu */
-    header, .footer-note {
-      display: none;
-    }
-    
-    .content-area {
-      display: flex;
-      flex-direction: column; 
-      align-items: center;
-      width: 100%;
-    }
-
-    /* --- GAMBAR PHOTOBOOTH (Full-bleed, Tanpa Border) --- */
-    .image-wrapper {
-      width: 100%;
-      max-width: 350px; /* Ukuran maksimal gambar */
-      border-radius: 0; 
-      overflow: hidden;
-      box-shadow: none; 
-      margin-bottom: 40px; 
-      line-height: 0;
-    }
-    
-    .photobooth-image {
-      width: 100%;
-      height: auto;
-      display: block;
-    }
-    
-    /* --- TOMBOL ENTER (Skeuomorphic, Menyesuaikan Ukuran Teks) --- */
-    .cta-button {
-      background-color: var(--hex-magenta);
-      color: var(--hex-cream);
-      
-      display: inline-block; /* Agar menyusut seukuran konten */
-      
-      text-decoration: none;
-      font-size: 1.2rem;
-      font-weight: bold;
-      text-align: center;
-      padding: 15px 30px;
-      border-radius: 50px;
-      
-      /* Skeuomorphic shadows */
-      box-shadow: 
-        inset 1px 1px 1px rgba(var(--rgb-cream), 0.5), 
-        inset -1px -1px 2px rgba(var(--rgb-magenta), 0.9), 
-        0 4px 6px -1px rgba(var(--rgb-dark), 0.4), 
-        0 1px 0 rgba(255,255,255,0.4); 
-      
-      transition: all 0.15s ease;
-      user-select: none;
-    }
-    
-    .cta-button:hover {
-      filter: brightness(1.1);
-    }
-    
-    .cta-button:active { 
-      transform: translateY(2px);
-      box-shadow: 
-        inset 1px 1px 2px rgba(var(--rgb-dark), 0.4),
-        0 2px 4px rgba(var(--rgb-dark), 0.2); 
-    }
-  </style>
+  <link rel="icon" href="favicon.png" type="image/x-icon" />
+  <link rel="stylesheet" href="home.css" /> 
 </head>
 <body>
 
   <div class="container">
-    
-    <header>
-      </header>
-
     <main class="content-area">
-      
       <div class="image-wrapper">
-        <img src="Assets/photobooth-machine.png" alt="Photobooth Machine" class="photobooth-image" id="photoboothImage">
+        <img src="photobooth-machine.png" alt="Photobooth Machine" class="photobooth-image" id="photoboothImage">
       </div>
 
       <a href="menu.html" class="cta-button">
         ENTER
       </a>
-
-      <p class="footer-note">
-        </p>
     </main>
-    
   </div>
+
+  <script src="bubbles.js"></script>
+  <script src="home.js"></script>
 </body>
 </html>
